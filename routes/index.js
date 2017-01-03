@@ -13,10 +13,10 @@ router.get('/getlist', function(req, res, next) {
   var location = req.query.location;
   var radius = req.query.radius;
   var key = process.env.GOOGLE_API_KEY;
-  var url = 'http://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + location + '&radius=' + radius + '&type=' + type + '&key=' + key;
+  var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + location + '&radius=' + radius + '&type=' + type + '&key=' + key;
   request(url, function(error, response, body) {
-    console.log(body.results);
-    res.send(body.results);
+    console.log(body);
+    res.send(body);
   });
 });
 
