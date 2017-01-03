@@ -2,7 +2,7 @@ exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return knex.raw('DELETE FROM "badge"; ALTER SEQUENCE badge_id_seq RESTART WITH 5;')
     .then(function () {
-      const badges = [{
+      var badges = [{
         id: 1,
         badge_name: 'CJ',
         type: 'location',
