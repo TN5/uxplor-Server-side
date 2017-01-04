@@ -16,7 +16,7 @@ router.get('/getlist', function(req, res, next) {
   var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + location + '&radius=' + radius + '&type=' + type + '&key=' + key;
   request(url, function(error, response, body) {
     console.log(body);
-    res.send(body);
+    res.json(body);
   });
 });
 
