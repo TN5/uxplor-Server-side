@@ -20,14 +20,22 @@ router.get('/getlist', function(req, res, next) {
   });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/flag/:id', function(req, res, next) {
   var locationFeedback = {
+    id: req.params.id,
     name: req.body.name,
-    googleId: req.body.google_id,
-    flagType: req.body.flag_type,
-    userId: req.body.user_id
+    google_id: req.body.google_id,
+    flag_type: req.body.flag_type,
+    user_id: req.body.user_id
   }
-  res.json(req.body);
+  knex('location_feedback').insert(locationFeedback)
+  .then(function() {
+    res.send(locationFeedback)
+  })
 });
+
+router.get('/badge:id',function (req,res, next) {
+  console.log('badges');
+})
 
 module.exports = router;
