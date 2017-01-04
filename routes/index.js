@@ -20,4 +20,14 @@ router.get('/getlist', function(req, res, next) {
   });
 });
 
+router.post('/', function(req, res, next) {
+  var locationFeedback = {
+    name: req.body.name,
+    googleId: req.body.google_id,
+    flagType: req.body.flag_type,
+    userId: req.body.user_id
+  }
+  res.json(req.body);
+});
+
 module.exports = router;
