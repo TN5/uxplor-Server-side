@@ -34,6 +34,17 @@ router.post('/flag/:id', function(req, res, next) {
   })
 });
 
+router.post('/feedback', function (req, res, next){
+  var feedback = {
+    rating: req.body.rating
+  }
+  knex('feedback').insert(feedback)
+    .then(function(){
+      res.send(feedback)
+    })
+})
+
+
 router.get('/badge/:id',function (req,res, next) {
   knex('user_badge')
     .where({'id': req.params.id})
