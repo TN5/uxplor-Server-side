@@ -43,6 +43,12 @@ router.get('/badge/:id',function (req,res, next) {
 })
 
 router.post('/badge/:id', function(req, res, next){
-  //hold please
-})
+  knex('user_badge')
+    .where({'id': req.params.id})
+    .insert({
+        user_id: req.body.user_id,
+        badge_id: req.body.badge_id
+      })
+});
+
 module.exports = router;
