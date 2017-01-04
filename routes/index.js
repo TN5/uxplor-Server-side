@@ -34,8 +34,12 @@ router.post('/flag/:id', function(req, res, next) {
   })
 });
 
-router.get('/badge:id',function (req,res, next) {
-  console.log('badges');
+router.get('/badge/:id',function (req,res, next) {
+  knex('user_badge')
+    .where({'id': req.params.id})
+    .then(function(badge){
+      res.send(badge)
+    })
 })
 
 module.exports = router;
