@@ -42,4 +42,7 @@ router.get('/badge/:id',function (req,res, next) {
     })
 })
 
+router.post('/badge/:id', function(req, res, next){
+  //hold please
+})
 module.exports = router;
