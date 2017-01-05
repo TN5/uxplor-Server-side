@@ -20,4 +20,56 @@ router.get('/getlist', function(req, res, next) {
   });
 });
 
+router.post('/flag', function(req, res, next) {
+  var locationFeedback = {
+    name: req.body.name,
+    google_id: req.body.google_id,
+    flag_type: req.body.flag_type,
+    user_id: req.body.user_id
+  }
+  knex('location_feedback').insert(locationFeedback)
+  .then(function() {
+    res.send(locationFeedback)
+  })
+});
+
+router.get('/flag', function(req, res, next) {
+  return knex('location_feedback').then(function (flagged) {
+    res.json(flagged)
+  })
+})
+
+router.post('/feedback', function (req, res, next){
+  var feedback = {
+    rating: req.body.rating
+  }
+  knex('feedback').insert(feedback)
+    .then(function(){
+      res.send(feedback)
+    })
+})
+
+router.get('/feedback', function(req, res, next) {
+  return knex('feedback').then(function (rating) {
+    res.json(rating)
+  })
+})
+
+router.get('/badge/:id',function (req,res, next) {
+  knex('user_badge')
+    .where({'id': req.params.id})
+    .then(function(badge){
+      res.send(badge)
+    })
+})
+
+router.post('/badge', function(req, res, next){
+  console.log(req.body);
+  knex('user_badge').insert(req.body)
+    .then(function() {
+      res.json(req.body)
+    })
+});
+
+
 module.exports = router;
