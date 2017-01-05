@@ -10,6 +10,10 @@ router.get('/', function(req, res, next) {
   res.json({ message: 'locked'});
 });
 
+router.get('/params', function(req, res, next) {
+
+});
+
 function validUser(user) {
   var validEmail = typeof user.email == 'string' &&
                     user.email.trim() != '';
@@ -33,9 +37,8 @@ router.post('/signup', function(req, res, next) {
           }
           User.create(user)
           .then(function(id){
-            res.json({ id,message: '✅' })
+            res.json({ id,message: '✅ 🔐' })
           })
-
         })
       } else {
           next(new Error('Invalid Input'))
@@ -43,5 +46,29 @@ router.post('/signup', function(req, res, next) {
     })
   }
 })
+
+router.post('/signin', function(req, res, next) {
+  if(validUser(req.body)) {
+    User.getUserByEmail(req.body.email)
+    .then(function(user) {
+      if(user) {
+        console.log(user);
+        bcrypt.compare(req.body.password, user.password)
+          .then(function(err,result) {
+            res.json({
+              result,
+              message: "Signed In! 🔓"
+            })
+            // next(res.redirect('/params'))
+          })
+      } else {
+        next(new Error('Invalid Signin'))
+      }
+  })
+  } else {
+    next(new Error('Invalid Input'))
+  }
+})
+
 
 module.exports = router;
