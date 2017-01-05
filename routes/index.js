@@ -20,9 +20,8 @@ router.get('/getlist', function(req, res, next) {
   });
 });
 
-router.post('/flag/:id', function(req, res, next) {
+router.post('/flag', function(req, res, next) {
   var locationFeedback = {
-    id: req.params.id,
     name: req.body.name,
     google_id: req.body.google_id,
     flag_type: req.body.flag_type,
@@ -34,6 +33,12 @@ router.post('/flag/:id', function(req, res, next) {
   })
 });
 
+router.get('/flag', function(req, res, next) {
+  return knex('location_feedback').then(function (flagged) {
+    res.json(flagged)
+  })
+})
+
 router.post('/feedback', function (req, res, next){
   var feedback = {
     rating: req.body.rating
@@ -44,6 +49,11 @@ router.post('/feedback', function (req, res, next){
     })
 })
 
+router.get('/feedback', function(req, res, next) {
+  return knex('feedback').then(function (rating) {
+    res.json(rating)
+  })
+})
 
 router.get('/badge/:id',function (req,res, next) {
   knex('user_badge')
