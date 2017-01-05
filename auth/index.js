@@ -3,6 +3,7 @@ var router = express.Router();
 var knex = require('../db/knex');
 var request = require('request');
 var User = require('./user');
+var bcrypt = require('bcryptjs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,14 +20,28 @@ function validUser(user) {
 }
 
 router.post('/signup', function(req, res, next) {
-  if(validUser(req.body)){
+  if(validUser(req.body)) {
     User.getUserByEmail(req.body.email)
-    .then(res.json({
-      message: "valid input"
-    }))
-  } else {
-    next(new Error('Invalid Input'))
+    .then(function(user) {
+      if(!user) {
+        bcrypt.hash('req.body.password', 8)
+        .then(function(hash) {
+          var user = {
+            name: req.body.name,
+            email: req.body.email,
+            password: hash
+          }
+          User.create(user)
+          .then(function(id){
+            res.json({ id,message: '✅' })
+          })
+
+        })
+      } else {
+          next(new Error('Invalid Input'))
+      }
+    })
   }
-});
+})
 
 module.exports = router;

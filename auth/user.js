@@ -6,5 +6,10 @@ module.exports = {
   },
   getUserByEmail: function(email) {
     return knex('user').where('email', email).first();
+  },
+  create: function(user) {
+    return knex('user').insert(user, 'id').then(function(ids) {
+      return ids[0];
+    });
   }
 }
