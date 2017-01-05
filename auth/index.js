@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var knex = require('../db/knex');
 var request = require('request');
+var User = require('./user');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,9 +20,10 @@ function validUser(user) {
 
 router.post('/signup', function(req, res, next) {
   if(validUser(req.body)){
-    res.json({
+    User.getUserByEmail(req.body.email)
+    .then(res.json({
       message: "valid input"
-    });
+    }))
   } else {
     next(new Error('Invalid Input'))
   }
