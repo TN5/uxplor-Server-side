@@ -65,12 +65,19 @@ router.get('/badge/:id',function (req,res, next) {
 })
 
 router.post('/badge', function(req, res, next){
-  console.log(req.body);
   knex('user_badge').insert(req.body)
     .then(function() {
       res.json(req.body)
     })
 });
 
+router.put('/flag/:id', function(req, res, next) {
+  knex('location_feedback')
+  .where('id', req.params.id)
+  .update(req.body).returning('id')
+  .then(function(id) {
+    res.send(id)
+  })
+})
 
 module.exports = router;
