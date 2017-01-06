@@ -24,6 +24,7 @@ router.post('/flag', function(req, res, next) {
   var locationFeedback = {
     name: req.body.name,
     google_id: req.body.google_id,
+    flagged: req.body.flagged,
     flag_type: req.body.flag_type,
     user_id: req.body.user_id
   }
