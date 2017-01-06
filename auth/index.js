@@ -41,9 +41,11 @@ router.post('/signup', function(req, res, next) {
           })
         })
       } else {
-          next(new Error('Invalid Input'))
+          next(new Error('Email in use'))
       }
     })
+  } else {
+    next(new Error('Invalid Input'))
   }
 })
 
@@ -53,18 +55,19 @@ router.post('/signin', function(req, res, next) {
     .then(function(user) {
       if(user) {
         console.log(user);
-        bcrypt.compare(req.body.password, user.password)
-          .then(function(err,result) {
-            res.cookie('user_id',user.id, {
-              HTTPOnly: true,
-              signed: true
-              // secure: req.app.get('env') != 'development'//secure when in production
-            })
-            res.json({
-              result,
-              message: "Signed In! 🔓"
-            })
-            // next(res.redirect('/params'))
+        bcrypt.compare(req.body.password, user.password, function() {
+            // if(result===true) {
+              res.cookie('user_id', user.id, {
+                HTTPOnly: true,
+                signed: true,
+                secure: req.app.get('env') != 'development' //secure when in production
+              });
+
+              res.json({
+                id: user.id,
+                message: "Signed In! 🔓"
+              })
+            // }
           })
       } else {
         next(new Error('Invalid Signin'))
