@@ -37,7 +37,8 @@ router.post('/signup', function(req, res, next) {
           }
           User.create(user)
           .then(function(id){
-            res.json({ id,message: '✅ 🔐' })
+
+            res.json({ id, message: '✅ 🔐' })
           })
         })
       } else {
@@ -55,13 +56,13 @@ router.post('/signin', function(req, res, next) {
     .then(function(user) {
       if(user) {
         console.log(user);
+    
         bcrypt.compare(req.body.password, user.password, function() {
           res.cookie('user_id', user.id, {
             HTTPOnly: true,
-            secure: req.app.get('env') != 'development', //secure when in production
+            // secure: req.app.get('env') != 'development', //secure when in production
             signed: true
           });
-
           res.json({
             id: user.id,
             message: "Signed In! 🔓"
@@ -70,6 +71,7 @@ router.post('/signin', function(req, res, next) {
     } else {
        next(new Error('Invalid Signin'))
     }})
+
   } else {
     next(new Error('Invalid Input'))
   }
