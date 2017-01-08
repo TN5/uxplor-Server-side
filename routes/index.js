@@ -8,6 +8,13 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/badges', function(req, res, next) {
+  knex('badge').select()
+  .then(function(data) {
+    res.json(data);
+  })
+});
+
 router.get('/getlist', function(req, res, next) {
   var type = req.query.type;
   var location = req.query.location;
@@ -57,12 +64,14 @@ router.get('/feedback', function(req, res, next) {
 })
 
 router.get('/badge/:id',function (req,res, next) {
-  knex('user_badge')
-    .where({'id': req.params.id})
-    .then(function(badge){
-      res.send(badge)
+  knex.from('badge')
+    .innerJoin('user_badge', 'badge.id', 'user_badge.badge_id')
+    .where('user_id', req.params.id)
+    .then(function (badges) {
+      res.send(badges)
     })
 })
+
 
 router.post('/badge', function(req, res, next){
   knex('user_badge').insert(req.body)
