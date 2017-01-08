@@ -78,7 +78,7 @@ router.put('/flag/:id', function(req, res, next) {
   .where('id', req.params.id)
   .update(req.body).returning('id')
   .then(function(id) {
-    res.send(id)
+    console.log(id);
   })
 })
 
