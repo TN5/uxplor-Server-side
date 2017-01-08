@@ -8,6 +8,13 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/badges', function(req, res, next) {
+  knex('badge').select()
+  .then(function(data) {
+    res.json(data);
+  })
+});
+
 router.get('/getlist', function(req, res, next) {
   var type = req.query.type;
   var location = req.query.location;
