@@ -10,10 +10,6 @@ router.get('/', function(req, res, next) {
   res.json({ message: 'locked'});
 });
 
-router.get('/params', function(req, res, next) {
-
-});
-
 function validUser(user) {
   var validEmail = typeof user.email == 'string' &&
                     user.email.trim() != '';
@@ -37,7 +33,7 @@ router.post('/signup', function(req, res, next) {
           }
           User.create(user)
           .then(function(id){
-            res.json({ id,message: '✅ 🔐' })
+            res.json({ id, message: '✅ 🔐' })
           })
         })
       } else {
@@ -58,10 +54,9 @@ router.post('/signin', function(req, res, next) {
         bcrypt.compare(req.body.password, user.password, function() {
           res.cookie('user_id', user.id, {
             HTTPOnly: true,
-            secure: req.app.get('env') != 'development', //secure when in production
+            // secure: req.app.get('env') != 'development', //secure when in production
             signed: true
           });
-
           res.json({
             id: user.id,
             message: "Signed In! 🔓"
