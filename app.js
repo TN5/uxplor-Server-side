@@ -26,7 +26,11 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
+<<<<<<< HEAD
   origin: 'https://uxplor-7ce2a.firebaseapp.com'||'http://127.0.0.1:8080',
+=======
+  origin: ['https://localhost:8080','https://127.0.0.1:8080','https://uxplor-7ce2a.firebaseapp.com'],
+>>>>>>> 7a7acaac12452ad0e269835661e540f868dfa3c2
   credentials:true
 }));
 
