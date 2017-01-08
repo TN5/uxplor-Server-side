@@ -10,10 +10,6 @@ router.get('/', function(req, res, next) {
   res.json({ message: 'locked'});
 });
 
-router.get('/params', function(req, res, next) {
-
-});
-
 function validUser(user) {
   var validEmail = typeof user.email == 'string' &&
                     user.email.trim() != '';
@@ -37,13 +33,15 @@ router.post('/signup', function(req, res, next) {
           }
           User.create(user)
           .then(function(id){
-            res.json({ id,message: '✅ 🔐' })
+            res.json({ id, message: '✅ 🔐' })
           })
         })
       } else {
-          next(new Error('Invalid Input'))
+          next(new Error('Email in use'))
       }
     })
+  } else {
+    next(new Error('Invalid Input'))
   }
 })
 
@@ -53,27 +51,23 @@ router.post('/signin', function(req, res, next) {
     .then(function(user) {
       if(user) {
         console.log(user);
-        bcrypt.compare(req.body.password, user.password)
-          .then(function(err,result) {
-            res.cookie('user_id',user.id, {
-              HTTPOnly: true,
-              signed: true
-              // secure: req.app.get('env') != 'development'//secure when in production
-            })
-            res.json({
-              result,
-              message: "Signed In! 🔓"
-            })
-            // next(res.redirect('/params'))
+        bcrypt.compare(req.body.password, user.password, function() {
+          res.cookie('user_id', user.id, {
+            HTTPOnly: true,
+            // secure: req.app.get('env') != 'development', //secure when in production
+            signed: true
+          });
+          res.json({
+            id: user.id,
+            message: "Signed In! 🔓"
           })
-      } else {
-        next(new Error('Invalid Signin'))
-      }
-  })
+      })
+    } else {
+       next(new Error('Invalid Signin'))
+    }})
   } else {
     next(new Error('Invalid Input'))
   }
 })
-
 
 module.exports = router;

@@ -16,7 +16,7 @@ router.get('/getlist', function(req, res, next) {
   var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + location + '&radius=' + radius + '&type=' + type + '&key=' + key;
   request(url, function(error, response, body) {
     console.log(body);
-    res.json(body);
+    res.send(body);
   });
 });
 
@@ -24,6 +24,7 @@ router.post('/flag', function(req, res, next) {
   var locationFeedback = {
     name: req.body.name,
     google_id: req.body.google_id,
+    flagged: req.body.flagged,
     flag_type: req.body.flag_type,
     user_id: req.body.user_id
   }
@@ -64,12 +65,19 @@ router.get('/badge/:id',function (req,res, next) {
 })
 
 router.post('/badge', function(req, res, next){
-  console.log(req.body);
   knex('user_badge').insert(req.body)
     .then(function() {
       res.json(req.body)
     })
 });
 
+router.put('/flag/:id', function(req, res, next) {
+  knex('location_feedback')
+  .where('id', req.params.id)
+  .update(req.body).returning('id')
+  .then(function(id) {
+    res.send(id)
+  })
+})
 
 module.exports = router;
