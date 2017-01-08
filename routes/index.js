@@ -60,14 +60,12 @@ router.get('/badge/:id',function (req,res, next) {
     .innerJoin('user_badge', 'badge.id', 'user_badge.badge_id')
     .where('user_id', req.params.id)
     .then(function (badges) {
-      console.log(badges)
       res.send(badges)
     })
 })
 
 
 router.post('/badge', function(req, res, next){
-  console.log(req.body);
   knex('user_badge').insert(req.body)
     .then(function() {
       res.json(req.body)
