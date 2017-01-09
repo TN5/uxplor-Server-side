@@ -4,8 +4,10 @@ var knex = require('../db/knex');
 var request = require('request');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/user/:id', function(req, res, next) {
+  res.json({
+    id: user.id
+  })
 });
 
 router.get('/getlist', function(req, res, next) {
@@ -57,6 +59,7 @@ router.get('/feedback', function(req, res, next) {
 })
 
 router.get('/badge/:id',function (req,res, next) {
+  console.log(req.params.id);
   knex.from('badge')
     .innerJoin('user_badge', 'badge.id', 'user_badge.badge_id')
     .where('user_id', req.params.id)

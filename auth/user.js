@@ -12,4 +12,8 @@ module.exports = {
       return ids[0];
     });
   }
+  // ,
+  // deleteUserById: function(id) {
+  //   return knex('user').where('id',id).del();
+  // }
 }

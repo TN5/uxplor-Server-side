@@ -6,9 +6,6 @@ var User = require('./user');
 var bcrypt = require('bcryptjs');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.json({ message: 'locked'});
-});
 
 function validUser(user) {
   var validEmail = typeof user.email == 'string' &&
@@ -18,6 +15,22 @@ function validUser(user) {
                     user.password.length >= 6;
   return validEmail && validPassword;
 }
+
+router.get('/', function(req, res, next) {
+  res.json({ message: 'welcome to uxplor'});
+});
+
+router.get('/user/:id', function(req, res, next) {
+  var id = req.params.id;
+  // console.log(id);
+  User.getOne(id)
+  .then(function(result){
+    res.json({
+      name: result.name,
+      email: result.email,
+    })
+  })
+});
 
 router.post('/signup', function(req, res, next) {
   if(validUser(req.body)) {
@@ -33,7 +46,6 @@ router.post('/signup', function(req, res, next) {
           }
           User.create(user)
           .then(function(id){
-
             res.json({ id, message: '✅ 🔐' })
           })
         })
@@ -51,7 +63,7 @@ router.post('/signin', function(req, res, next) {
     User.getUserByEmail(req.body.email)
     .then(function(user) {
       if(user) {
-        console.log(user);
+        // console.log(user);
         bcrypt.compare(req.body.password, user.password, function() {
           res.cookie('user_id', user.id, {
             HTTPOnly: true,
@@ -71,5 +83,14 @@ router.post('/signin', function(req, res, next) {
     next(new Error('Invalid Input'))
   }
 })
+
+// router.delete('/user/:id', function(req,res,next) {
+//   User.deleteUserById(id)
+//   .then(function(result){
+//     console.log('deleted');
+//   })
+// })
+
+
 
 module.exports = router;
